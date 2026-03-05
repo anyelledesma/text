@@ -37,7 +37,7 @@ export class InventoryService {
         data: {
           ...dto,
           companyId,
-          createdById: userId,
+          createdBy: userId,
         },
       });
 
@@ -54,7 +54,6 @@ export class InventoryService {
         create: {
           productId: dto.productId,
           warehouseId: dto.warehouseId,
-          companyId,
           quantity: dto.quantity,
         },
         update: {
@@ -76,7 +75,7 @@ export class InventoryService {
       },
     });
 
-    const currentQty = currentStock?.quantity ?? 0;
+    const currentQty = currentStock ? Number(currentStock.quantity) : 0;
     const difference = dto.newQuantity - currentQty;
 
     if (difference === 0) {

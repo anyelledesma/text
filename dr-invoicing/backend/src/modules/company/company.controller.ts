@@ -40,7 +40,7 @@ export class CompanyController {
   @ApiOperation({ summary: 'Agregar sucursal a la empresa' })
   addBranch(
     @CurrentUser() user: CurrentUserData,
-    @Body() branchData: { name: string; address?: string; phone?: string; isMain?: boolean },
+    @Body() branchData: { name: string; code: string; address?: string; phone?: string; isMain?: boolean },
   ) {
     return this.companyService.addBranch(user.companyId, branchData);
   }

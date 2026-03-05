@@ -19,9 +19,9 @@ export class ReportsService {
       orderBy: { createdAt: 'asc' },
     });
 
-    const totalSales = invoices.reduce((sum, inv) => sum + (inv.totalAmount ?? 0), 0);
-    const totalTax = invoices.reduce((sum, inv) => sum + (inv.totalTax ?? 0), 0);
-    const totalDiscount = invoices.reduce((sum, inv) => sum + (inv.totalDiscount ?? 0), 0);
+    const totalSales = invoices.reduce((sum, inv) => sum + Number(inv.total ?? 0), 0);
+    const totalTax = invoices.reduce((sum, inv) => sum + Number(inv.totalItbis ?? 0), 0);
+    const totalDiscount = invoices.reduce((sum, inv) => sum + Number(inv.discountTotal ?? 0), 0);
 
     return {
       dateFrom,
@@ -41,13 +41,13 @@ export class ReportsService {
   async generate606(companyId: string, period: string) {
     const { startDate, endDate } = this.parsePeriod(period);
 
-    const purchases = await this.prisma.purchase.findMany({
+    const purchases = await this.prisma.purchaseOrder.findMany({
       where: {
         companyId,
-        purchaseDate: { gte: startDate, lte: endDate },
+        orderDate: { gte: startDate, lte: endDate },
       },
       include: { supplier: true },
-      orderBy: { purchaseDate: 'asc' },
+      orderBy: { orderDate: 'asc' },
     });
 
     return {
@@ -55,12 +55,12 @@ export class ReportsService {
       period,
       generatedAt: new Date(),
       recordCount: purchases.length,
-      records: purchases.map((p) => ({
+      records: purchases.map((p: any) => ({
         rncCedula: (p as any).supplier?.rnc,
         tipoId: (p as any).supplier?.idType,
         tipoBienServicio: (p as any).bienOServicio,
         ncf: (p as any).ncf,
-        fechaComprobante: p.purchaseDate,
+        fechaComprobante: p.orderDate,
         montoFacturado: (p as any).totalAmount,
         itbisFacturado: (p as any).totalTax,
       })),
@@ -95,8 +95,8 @@ export class ReportsService {
         ncf: (inv as any).ncf,
         ecfType: inv.ecfType,
         fechaComprobante: inv.createdAt,
-        montoFacturado: inv.totalAmount,
-        itbisFacturado: inv.totalTax,
+        montoFacturado: inv.total,
+        itbisFacturado: inv.totalItbis,
       })),
     };
   }
@@ -112,9 +112,9 @@ export class ReportsService {
       where: {
         companyId,
         status: 'cancelled',
-        cancelledAt: { gte: startDate, lte: endDate },
+        updatedAt: { gte: startDate, lte: endDate },
       },
-      orderBy: { cancelledAt: 'asc' },
+      orderBy: { updatedAt: 'asc' },
     });
 
     return {

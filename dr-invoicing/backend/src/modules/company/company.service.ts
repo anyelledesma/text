@@ -36,9 +36,9 @@ export class CompanyService {
         rnc: dto.rnc,
         businessName: dto.businessName,
         tradeName: dto.tradeName,
-        address: dto.address,
-        municipality: dto.municipality,
-        province: dto.province,
+        address: dto.address ?? '',
+        municipality: dto.municipality ?? '',
+        province: dto.province ?? '',
         phone: dto.phone,
         email: dto.email,
         website: dto.website,
@@ -58,11 +58,12 @@ export class CompanyService {
     });
   }
 
-  async addBranch(companyId: string, branchData: { name: string; address?: string; phone?: string; isMain?: boolean }) {
+  async addBranch(companyId: string, branchData: { name: string; code: string; address?: string; phone?: string; isMain?: boolean }) {
     return this.prisma.branch.create({
       data: {
         companyId,
         name: branchData.name,
+        code: branchData.code,
         address: branchData.address,
         phone: branchData.phone,
         isMain: branchData.isMain ?? false,
@@ -83,7 +84,7 @@ export class CompanyService {
 
     return this.prisma.company.update({
       where: { id },
-      data: { isActive: false },
+      data: { isEcfEnabled: false },
     });
   }
 }

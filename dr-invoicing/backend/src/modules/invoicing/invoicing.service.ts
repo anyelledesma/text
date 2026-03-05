@@ -66,7 +66,7 @@ export class InvoicingService {
   }
 
   async create(companyId: string, userId: string, dto: CreateInvoiceDto) {
-    const items = dto.items.map((item) => {
+    const items = dto.items.map((item, index) => {
       const subtotal = item.quantity * item.unitPrice;
       const discountAmount = subtotal * (item.discountPct / 100);
       const taxableAmount = subtotal - discountAmount;
@@ -75,7 +75,8 @@ export class InvoicingService {
 
       return {
         productId: item.productId,
-        description: item.description,
+        lineNumber: index + 1,
+        description: item.description ?? '',
         quantity: item.quantity,
         unitPrice: item.unitPrice,
         discountPct: item.discountPct,
@@ -97,13 +98,15 @@ export class InvoicingService {
         companyId,
         branchId: dto.branchId,
         customerId: dto.customerId,
+        invoiceNumber: '', // Will be assigned by sequence logic
+        issueDate: new Date(),
         ecfType: dto.ecfType,
         currencyCode: dto.currencyCode,
         exchangeRate: dto.exchangeRate,
         subtotal,
-        totalTax,
-        totalDiscount,
-        totalAmount,
+        totalItbis: totalTax,
+        discountTotal: totalDiscount,
+        total: totalAmount,
         notes: dto.notes,
         paymentForm: dto.paymentForm,
         status: 'draft',
@@ -127,8 +130,7 @@ export class InvoicingService {
       where: { id },
       data: {
         status: 'cancelled',
-        cancelledById: userId,
-        cancelledAt: new Date(),
+        updatedById: userId,
       },
     });
   }

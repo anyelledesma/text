@@ -2,6 +2,7 @@ import { useAuthStore } from '~/stores/auth'
 
 export default defineNuxtRouteMiddleware((to) => {
   const authStore = useAuthStore()
+  authStore.loadFromStorage()
 
   const publicRoutes = ['/login']
   const isPublicRoute = publicRoutes.includes(to.path)

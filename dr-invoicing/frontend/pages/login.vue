@@ -27,7 +27,8 @@ async function handleLogin() {
     showSuccess('Inicio de sesión exitoso')
     await router.push('/')
   } catch (error: any) {
-    showError(error?.message || 'Credenciales inválidas. Intente nuevamente.')
+    const msg = error?.data?.message || error?.message || 'Credenciales inválidas. Intente nuevamente.'
+    showError(msg)
   } finally {
     loading.value = false
   }

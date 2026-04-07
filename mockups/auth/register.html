@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>[MOCKUP] Registro — DR Invoicing</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Segoe UI', system-ui, sans-serif; }
+    .mockup-badge {
+      position: fixed; top: 12px; right: 12px;
+      background: #f59e0b; color: #000; font-size: 11px;
+      font-weight: 700; padding: 4px 10px; border-radius: 999px; z-index: 50;
+    }
+    input:focus { border-color: #2563eb !important; box-shadow: 0 0 0 3px rgba(37,99,235,0.15); outline: none; }
+    select:focus { border-color: #2563eb !important; outline: none; }
+    .step-line { flex: 1; height: 2px; }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-800 to-slate-700 min-h-screen flex items-center justify-center p-4">
+
+  <div class="mockup-badge">MOCKUP</div>
+
+  <div class="w-full max-w-[520px]">
+
+    <!-- Logo -->
+    <div class="text-center mb-6">
+      <div class="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      </div>
+      <h1 class="text-white text-xl font-bold">DR Invoicing</h1>
+      <p class="text-slate-400 text-xs mt-1">Crea tu cuenta — 14 días gratis, sin tarjeta</p>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+
+      <!-- Steps header -->
+      <div class="px-6 pt-6 pb-4 border-b border-slate-100">
+        <div class="flex items-center">
+
+          <!-- Step 1 -->
+          <div class="flex flex-col items-center" id="step1-indicator">
+            <div class="w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold flex items-center justify-center">1</div>
+            <span class="text-xs text-blue-600 font-medium mt-1">Empresa</span>
+          </div>
+
+          <div class="step-line bg-slate-200 mx-2"></div>
+
+          <!-- Step 2 -->
+          <div class="flex flex-col items-center opacity-40" id="step2-indicator">
+            <div class="w-8 h-8 rounded-full bg-slate-300 text-slate-600 text-sm font-bold flex items-center justify-center">2</div>
+            <span class="text-xs text-slate-500 font-medium mt-1">Administrador</span>
+          </div>
+
+          <div class="step-line bg-slate-200 mx-2"></div>
+
+          <!-- Step 3 -->
+          <div class="flex flex-col items-center opacity-40" id="step3-indicator">
+            <div class="w-8 h-8 rounded-full bg-slate-300 text-slate-600 text-sm font-bold flex items-center justify-center">3</div>
+            <span class="text-xs text-slate-500 font-medium mt-1">Plan</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Step 1 — Company Data -->
+      <div id="step1" class="p-6">
+        <h2 class="text-slate-800 text-lg font-semibold mb-1">Datos de tu empresa</h2>
+        <p class="text-slate-500 text-sm mb-5">Esta información aparece en tus facturas electrónicas</p>
+
+        <div class="grid grid-cols-2 gap-4">
+          <!-- RNC -->
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">RNC / Cédula *</label>
+            <input type="text" placeholder="1-31-12345-7" value="1-31-12345-7"
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+            <p class="text-xs text-green-600 mt-1 flex items-center gap-1">
+              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              RNC verificado DGII
+            </p>
+          </div>
+
+          <!-- Phone -->
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Teléfono *</label>
+            <input type="tel" placeholder="809-000-0000" value="809-555-1234"
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+          </div>
+
+          <!-- Business Name -->
+          <div class="col-span-2">
+            <label class="block text-xs font-medium text-slate-700 mb-1">Razón social *</label>
+            <input type="text" placeholder="Mi Empresa SRL" value="Distribuidora Los Pinos SRL"
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+          </div>
+
+          <!-- Trade Name -->
+          <div class="col-span-2">
+            <label class="block text-xs font-medium text-slate-700 mb-1">Nombre comercial</label>
+            <input type="text" placeholder="Nombre que aparece al cliente (opcional)" value="Los Pinos"
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+          </div>
+
+          <!-- Address -->
+          <div class="col-span-2">
+            <label class="block text-xs font-medium text-slate-700 mb-1">Dirección *</label>
+            <input type="text" placeholder="Calle, No., Sector" value="Av. Winston Churchill 1099"
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+          </div>
+
+          <!-- Municipality -->
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Municipio</label>
+            <input type="text" placeholder="Santo Domingo" value="Santo Domingo"
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+          </div>
+
+          <!-- Province -->
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Provincia</label>
+            <select class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white">
+              <option>Distrito Nacional</option>
+              <option>Santiago</option>
+              <option>La Vega</option>
+              <option>San Pedro de Macorís</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex justify-end mt-6">
+          <button onclick="showStep(2)"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-6 rounded-lg text-sm transition flex items-center gap-2">
+            Siguiente
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2 — Admin User (hidden by default) -->
+      <div id="step2" class="p-6 hidden">
+        <h2 class="text-slate-800 text-lg font-semibold mb-1">Datos del administrador</h2>
+        <p class="text-slate-500 text-sm mb-5">Esta será la cuenta principal con acceso total</p>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Nombre *</label>
+            <input type="text" placeholder="Juan" value="María"
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Apellido *</label>
+            <input type="text" placeholder="Pérez" value="González"
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+          </div>
+          <div class="col-span-2">
+            <label class="block text-xs font-medium text-slate-700 mb-1">Correo electrónico *</label>
+            <input type="email" placeholder="admin@miempresa.com.do" value="admin@lospinos.com.do"
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Contraseña *</label>
+            <input type="password" placeholder="Mín. 8 caracteres" value="Secure123"
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Confirmar contraseña *</label>
+            <input type="password" placeholder="Repite la contraseña" value="Secure123"
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+          </div>
+          <div class="col-span-2">
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-700 flex gap-2">
+              <svg class="w-4 h-4 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+              </svg>
+              Podrás agregar más usuarios desde la sección de Configuración una vez dentro del sistema.
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between mt-6">
+          <button onclick="showStep(1)"
+            class="border border-slate-300 text-slate-600 font-medium py-2.5 px-5 rounded-lg text-sm hover:bg-slate-50 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Atrás
+          </button>
+          <button onclick="showStep(3)"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-6 rounded-lg text-sm transition flex items-center gap-2">
+            Siguiente
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 3 — Plan Selection (hidden by default) -->
+      <div id="step3" class="p-6 hidden">
+        <h2 class="text-slate-800 text-lg font-semibold mb-1">Elige tu plan</h2>
+        <p class="text-slate-500 text-sm mb-5">14 días gratis en cualquier plan. Sin tarjeta de crédito.</p>
+
+        <div class="grid grid-cols-3 gap-3">
+
+          <!-- FREE -->
+          <div class="border-2 border-slate-200 rounded-xl p-4 cursor-pointer hover:border-slate-300 transition" onclick="selectPlan(this)">
+            <div class="text-slate-500 text-xs font-semibold uppercase tracking-wide mb-2">Free</div>
+            <div class="text-slate-800 text-2xl font-bold">$0</div>
+            <div class="text-slate-400 text-xs mb-3">por mes</div>
+            <ul class="text-xs text-slate-600 space-y-1.5">
+              <li class="flex gap-1.5 items-start"><span class="text-green-500 font-bold">✓</span> 2 usuarios</li>
+              <li class="flex gap-1.5 items-start"><span class="text-green-500 font-bold">✓</span> 50 facturas/mes</li>
+              <li class="flex gap-1.5 items-start"><span class="text-green-500 font-bold">✓</span> 100 productos</li>
+              <li class="flex gap-1.5 items-start text-slate-400"><span>✗</span> e-CF DGII</li>
+            </ul>
+          </div>
+
+          <!-- STARTER (selected) -->
+          <div class="border-2 border-blue-500 rounded-xl p-4 cursor-pointer bg-blue-50 relative transition" onclick="selectPlan(this)">
+            <div class="absolute -top-2.5 left-1/2 -translate-x-1/2">
+              <span class="bg-blue-600 text-white text-xs font-bold px-2.5 py-0.5 rounded-full">Popular</span>
+            </div>
+            <div class="text-blue-600 text-xs font-semibold uppercase tracking-wide mb-2">Starter</div>
+            <div class="text-slate-800 text-2xl font-bold">$29</div>
+            <div class="text-slate-400 text-xs mb-3">por mes</div>
+            <ul class="text-xs text-slate-600 space-y-1.5">
+              <li class="flex gap-1.5 items-start"><span class="text-green-500 font-bold">✓</span> 5 usuarios</li>
+              <li class="flex gap-1.5 items-start"><span class="text-green-500 font-bold">✓</span> 500 facturas/mes</li>
+              <li class="flex gap-1.5 items-start"><span class="text-green-500 font-bold">✓</span> 1,000 productos</li>
+              <li class="flex gap-1.5 items-start"><span class="text-green-500 font-bold">✓</span> e-CF DGII</li>
+            </ul>
+          </div>
+
+          <!-- PROFESSIONAL -->
+          <div class="border-2 border-slate-200 rounded-xl p-4 cursor-pointer hover:border-slate-300 transition" onclick="selectPlan(this)">
+            <div class="text-slate-500 text-xs font-semibold uppercase tracking-wide mb-2">Professional</div>
+            <div class="text-slate-800 text-2xl font-bold">$79</div>
+            <div class="text-slate-400 text-xs mb-3">por mes</div>
+            <ul class="text-xs text-slate-600 space-y-1.5">
+              <li class="flex gap-1.5 items-start"><span class="text-green-500 font-bold">✓</span> 20 usuarios</li>
+              <li class="flex gap-1.5 items-start"><span class="text-green-500 font-bold">✓</span> 5,000 facturas/mes</li>
+              <li class="flex gap-1.5 items-start"><span class="text-green-500 font-bold">✓</span> 10,000 productos</li>
+              <li class="flex gap-1.5 items-start"><span class="text-green-500 font-bold">✓</span> Multi-sucursal</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="flex justify-between mt-6">
+          <button onclick="showStep(2)"
+            class="border border-slate-300 text-slate-600 font-medium py-2.5 px-5 rounded-lg text-sm hover:bg-slate-50 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Atrás
+          </button>
+          <button
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-6 rounded-lg text-sm transition flex items-center gap-2 shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Crear cuenta
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="text-center text-xs text-slate-500 mt-4">
+      ¿Ya tienes cuenta?
+      <a href="login.html" class="text-blue-400 hover:underline font-medium">Inicia sesión</a>
+    </p>
+  </div>
+
+  <script>
+    function showStep(n) {
+      ['step1','step2','step3'].forEach((id, i) => {
+        document.getElementById(id).classList.toggle('hidden', i !== n - 1);
+        const ind = document.getElementById(`step${i+1}-indicator`);
+        ind.classList.toggle('opacity-40', i >= n - 1 && i !== n - 1);
+        const circle = ind.querySelector('div');
+        const label = ind.querySelector('span');
+        if (i < n - 1) {
+          circle.className = 'w-8 h-8 rounded-full bg-green-500 text-white text-sm font-bold flex items-center justify-center';
+          circle.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>`;
+          label.className = 'text-xs text-green-600 font-medium mt-1';
+        } else if (i === n - 1) {
+          circle.className = 'w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold flex items-center justify-center';
+          circle.innerHTML = (i + 1).toString();
+          label.className = 'text-xs text-blue-600 font-medium mt-1';
+          ind.classList.remove('opacity-40');
+        } else {
+          circle.className = 'w-8 h-8 rounded-full bg-slate-300 text-slate-600 text-sm font-bold flex items-center justify-center';
+          circle.innerHTML = (i + 1).toString();
+          label.className = 'text-xs text-slate-500 font-medium mt-1';
+          ind.classList.add('opacity-40');
+        }
+      });
+    }
+    function selectPlan(el) {
+      document.querySelectorAll('[onclick="selectPlan(this)"]').forEach(p => {
+        p.classList.remove('border-blue-500','bg-blue-50');
+        p.classList.add('border-slate-200');
+      });
+      el.classList.add('border-blue-500','bg-blue-50');
+      el.classList.remove('border-slate-200');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>[MOCKUP] Login — DR Invoicing</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Segoe UI', system-ui, sans-serif; }
+    .mockup-badge {
+      position: fixed; top: 12px; right: 12px;
+      background: #f59e0b; color: #000; font-size: 11px;
+      font-weight: 700; padding: 4px 10px; border-radius: 999px;
+      letter-spacing: 0.05em; z-index: 50;
+    }
+    input, button { outline: none; }
+    input:focus { border-color: #2563eb !important; box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-800 to-slate-700 min-h-screen flex items-center justify-center p-4">
+
+  <div class="mockup-badge">MOCKUP</div>
+
+  <div class="w-full max-w-[420px]">
+
+    <!-- Logo / Branding -->
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+        <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      </div>
+      <h1 class="text-white text-2xl font-bold tracking-tight">DR Invoicing</h1>
+      <p class="text-slate-400 text-sm mt-1">Sistema de Facturación Electrónica e-CF</p>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-white rounded-2xl shadow-2xl p-8">
+      <h2 class="text-slate-800 text-xl font-semibold mb-1">Bienvenido de vuelta</h2>
+      <p class="text-slate-500 text-sm mb-6">Ingresa tus credenciales para continuar</p>
+
+      <!-- Form -->
+      <form onsubmit="return false">
+
+        <!-- Email -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-slate-700 mb-1.5">
+            Correo electrónico
+          </label>
+          <input
+            type="email"
+            placeholder="usuario@empresa.com.do"
+            value="admin@miempresa.com.do"
+            class="w-full border border-slate-300 rounded-lg px-3.5 py-2.5 text-sm text-slate-800 transition"
+          />
+        </div>
+
+        <!-- Password -->
+        <div class="mb-2">
+          <label class="block text-sm font-medium text-slate-700 mb-1.5">
+            Contraseña
+          </label>
+          <div class="relative">
+            <input
+              type="password"
+              placeholder="••••••••"
+              value="admin123"
+              class="w-full border border-slate-300 rounded-lg px-3.5 py-2.5 text-sm text-slate-800 pr-10 transition"
+            />
+            <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Forgot password -->
+        <div class="text-right mb-5">
+          <a href="forgot-password.html" class="text-xs text-blue-600 hover:underline">
+            ¿Olvidaste tu contraseña?
+          </a>
+        </div>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg text-sm transition flex items-center justify-center gap-2 shadow-sm"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+          </svg>
+          Iniciar sesión
+        </button>
+
+        <!-- Divider -->
+        <div class="flex items-center my-5">
+          <div class="flex-1 border-t border-slate-200"></div>
+          <span class="px-3 text-xs text-slate-400">¿Nuevo en DR Invoicing?</span>
+          <div class="flex-1 border-t border-slate-200"></div>
+        </div>
+
+        <!-- Register link -->
+        <a href="register.html">
+          <button type="button"
+            class="w-full border border-slate-300 hover:border-blue-400 hover:bg-blue-50 text-slate-700 font-medium py-2.5 px-4 rounded-lg text-sm transition"
+          >
+            Crear cuenta gratuita
+          </button>
+        </a>
+
+      </form>
+    </div>
+
+    <p class="text-center text-xs text-slate-500 mt-5">
+      &copy; 2026 DR Invoicing &mdash; Plataforma certificada DGII República Dominicana
+    </p>
+  </div>
+
+</body>
+</html>

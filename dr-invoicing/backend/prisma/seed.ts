@@ -384,6 +384,129 @@ async function main() {
     },
   });
 
+  // ============================================
+  // Planes SaaS
+  // ============================================
+  console.log('📦 Creando planes SaaS...');
+  const planDefs = [
+    {
+      tier: 'FREE' as const,
+      name: 'Free',
+      description: 'Para empezar sin costo',
+      priceMonthly: 0,
+      priceAnnual: 0,
+      maxUsers: 2,
+      maxBranches: 1,
+      maxWarehouses: 1,
+      maxInvoicesMonth: 50,
+      maxProductsSku: 100,
+      maxStorageGb: 1,
+      hasEcfIntegration: false,
+      hasMultiBranch: false,
+      hasApiAccess: false,
+      hasAdvancedReports: false,
+      hasCustomRoles: false,
+      hasPurchaseOrders: false,
+      hasPriceListMultiple: false,
+      hasPrioritySupport: false,
+      sortOrder: 0,
+    },
+    {
+      tier: 'STARTER' as const,
+      name: 'Starter',
+      description: 'Ideal para pequeñas empresas',
+      priceMonthly: 29,
+      priceAnnual: 290,
+      maxUsers: 5,
+      maxBranches: 1,
+      maxWarehouses: 2,
+      maxInvoicesMonth: 500,
+      maxProductsSku: 1000,
+      maxStorageGb: 10,
+      hasEcfIntegration: true,
+      hasMultiBranch: false,
+      hasApiAccess: false,
+      hasAdvancedReports: false,
+      hasCustomRoles: false,
+      hasPurchaseOrders: true,
+      hasPriceListMultiple: false,
+      hasPrioritySupport: false,
+      sortOrder: 1,
+    },
+    {
+      tier: 'PROFESSIONAL' as const,
+      name: 'Professional',
+      description: 'Para empresas en crecimiento',
+      priceMonthly: 79,
+      priceAnnual: 790,
+      maxUsers: 20,
+      maxBranches: 5,
+      maxWarehouses: 10,
+      maxInvoicesMonth: 5000,
+      maxProductsSku: 10000,
+      maxStorageGb: 50,
+      hasEcfIntegration: true,
+      hasMultiBranch: true,
+      hasApiAccess: true,
+      hasAdvancedReports: true,
+      hasCustomRoles: true,
+      hasPurchaseOrders: true,
+      hasPriceListMultiple: true,
+      hasPrioritySupport: false,
+      sortOrder: 2,
+    },
+    {
+      tier: 'ENTERPRISE' as const,
+      name: 'Enterprise',
+      description: 'Para grandes corporaciones',
+      priceMonthly: 0,
+      priceAnnual: 0,
+      maxUsers: null,
+      maxBranches: null,
+      maxWarehouses: null,
+      maxInvoicesMonth: null,
+      maxProductsSku: null,
+      maxStorageGb: null,
+      hasEcfIntegration: true,
+      hasMultiBranch: true,
+      hasApiAccess: true,
+      hasAdvancedReports: true,
+      hasCustomRoles: true,
+      hasPurchaseOrders: true,
+      hasPriceListMultiple: true,
+      hasPrioritySupport: true,
+      sortOrder: 3,
+    },
+  ];
+
+  for (const plan of planDefs) {
+    await prisma.plan.upsert({
+      where: { tier: plan.tier },
+      update: {},
+      create: plan,
+    });
+  }
+
+  // Asignar suscripción PROFESSIONAL a la empresa demo
+  const professionalPlan = await prisma.plan.findUnique({ where: { tier: 'PROFESSIONAL' } });
+  if (professionalPlan) {
+    const existingSub = await prisma.subscription.findUnique({ where: { companyId: company.id } });
+    if (!existingSub) {
+      const periodEnd = new Date();
+      periodEnd.setFullYear(periodEnd.getFullYear() + 1);
+      await prisma.subscription.create({
+        data: {
+          companyId: company.id,
+          planId: professionalPlan.id,
+          billingCycle: 'ANNUAL',
+          status: 'ACTIVE',
+          currentPeriodStart: new Date(),
+          currentPeriodEnd: periodEnd,
+        },
+      });
+    }
+  }
+
   console.log('✅ Seed completado exitosamente!');
   console.log('');
   console.log('📋 Credenciales de acceso:');

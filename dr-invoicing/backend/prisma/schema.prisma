@@ -47,6 +47,8 @@ model Company {
   purchaseOrders      PurchaseOrder[]
   ecfSequences        EcfSequence[]
   priceLists          PriceList[]
+  subscription        Subscription?
+  tenantFeatureFlags  TenantFeatureFlag[]
 
   @@map("companies")
 }
@@ -566,6 +568,172 @@ model PurchaseOrderItem {
 
   @@map("purchase_order_items")
 }
+
+// ============================================
+// SaaS Platform — Suscripciones y Facturación
+// ============================================
+
+enum PlanTier {
+  FREE
+  STARTER
+  PROFESSIONAL
+  ENTERPRISE
+}
+
+enum BillingCycle {
+  MONTHLY
+  ANNUAL
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELLED
+  EXPIRED
+}
+
+enum BillingInvoiceStatus {
+  DRAFT
+  OPEN
+  PAID
+  VOID
+  UNCOLLECTIBLE
+}
+
+model Plan {
+  id          String   @id @default(uuid()) @db.Uuid
+  tier        PlanTier @unique
+  name        String   @db.VarChar(100)
+  description String?
+
+  // Precios
+  priceMonthly Decimal @map("price_monthly") @db.Decimal(10, 2)
+  priceAnnual  Decimal @map("price_annual") @db.Decimal(10, 2)
+  currency     String  @default("USD") @db.VarChar(3)
+
+  // Límites de uso (null = ilimitado)
+  maxUsers         Int? @map("max_users")
+  maxBranches      Int? @map("max_branches")
+  maxWarehouses    Int? @map("max_warehouses")
+  maxInvoicesMonth Int? @map("max_invoices_month")
+  maxProductsSku   Int? @map("max_products_sku")
+  maxStorageGb     Int? @map("max_storage_gb")
+
+  // Feature flags por plan
+  hasEcfIntegration    Boolean @default(false) @map("has_ecf_integration")
+  hasMultiBranch       Boolean @default(false) @map("has_multi_branch")
+  hasApiAccess         Boolean @default(false) @map("has_api_access")
+  hasAdvancedReports   Boolean @default(false) @map("has_advanced_reports")
+  hasCustomRoles       Boolean @default(false) @map("has_custom_roles")
+  hasPurchaseOrders    Boolean @default(false) @map("has_purchase_orders")
+  hasPriceListMultiple Boolean @default(false) @map("has_price_list_multiple")
+  hasPrioritySupport   Boolean @default(false) @map("has_priority_support")
+
+  isPublic  Boolean @default(true)  @map("is_public")
+  isActive  Boolean @default(true)  @map("is_active")
+  sortOrder Int     @default(0)     @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime @updatedAt     @map("updated_at") @db.Timestamptz()
+
+  subscriptions Subscription[]
+
+  @@map("plans")
+}
+
+model Subscription {
+  id           String             @id @default(uuid()) @db.Uuid
+  companyId    String             @unique @map("company_id") @db.Uuid
+  planId       String             @map("plan_id") @db.Uuid
+  billingCycle BillingCycle       @map("billing_cycle")
+  status       SubscriptionStatus @default(TRIALING)
+
+  trialEndsAt        DateTime? @map("trial_ends_at") @db.Timestamptz()
+  currentPeriodStart DateTime  @map("current_period_start") @db.Timestamptz()
+  currentPeriodEnd   DateTime  @map("current_period_end") @db.Timestamptz()
+  cancelledAt        DateTime? @map("cancelled_at") @db.Timestamptz()
+  cancelAtPeriodEnd  Boolean   @default(false) @map("cancel_at_period_end")
+
+  // Referencia a pasarela de pago externa (Stripe, Azul, PayPal, etc.)
+  externalCustomerId     String? @map("external_customer_id") @db.VarChar(200)
+  externalSubscriptionId String? @map("external_subscription_id") @db.VarChar(200)
+
+  // Overrides por tenant (superadmin puede personalizar límites)
+  overrideMaxUsers         Int? @map("override_max_users")
+  overrideMaxInvoicesMonth Int? @map("override_max_invoices_month")
+
+  notes     String?
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime @updatedAt     @map("updated_at") @db.Timestamptz()
+
+  company         Company          @relation(fields: [companyId], references: [id])
+  plan            Plan             @relation(fields: [planId], references: [id])
+  billingInvoices BillingInvoice[]
+  usageSnapshots  UsageSnapshot[]
+
+  @@map("subscriptions")
+}
+
+// Captura de uso al cierre de cada ciclo (para enforcement y métricas)
+model UsageSnapshot {
+  id             String   @id @default(uuid()) @db.Uuid
+  subscriptionId String   @map("subscription_id") @db.Uuid
+  companyId      String   @map("company_id") @db.Uuid
+  invoicesCount  Int      @default(0) @map("invoices_count")
+  usersCount     Int      @default(0) @map("users_count")
+  productsCount  Int      @default(0) @map("products_count")
+  storageUsedMb  Int      @default(0) @map("storage_used_mb")
+  periodStart    DateTime @map("period_start") @db.Timestamptz()
+  periodEnd      DateTime @map("period_end") @db.Timestamptz()
+  capturedAt     DateTime @default(now()) @map("captured_at") @db.Timestamptz()
+
+  subscription Subscription @relation(fields: [subscriptionId], references: [id])
+
+  @@map("usage_snapshots")
+}
+
+// Facturas del SaaS (NO son facturas e-CF DGII — son recibos de la plataforma)
+model BillingInvoice {
+  id             String               @id @default(uuid()) @db.Uuid
+  subscriptionId String               @map("subscription_id") @db.Uuid
+  companyId      String               @map("company_id") @db.Uuid
+  invoiceNumber  String               @map("invoice_number") @db.VarChar(30)
+  status         BillingInvoiceStatus @default(DRAFT)
+  billingCycle   BillingCycle         @map("billing_cycle")
+  subtotal       Decimal              @db.Decimal(10, 2)
+  taxAmount      Decimal              @default(0) @map("tax_amount") @db.Decimal(10, 2)
+  total          Decimal              @db.Decimal(10, 2)
+  currency       String               @default("USD") @db.VarChar(3)
+  periodStart    DateTime             @map("period_start") @db.Timestamptz()
+  periodEnd      DateTime             @map("period_end") @db.Timestamptz()
+  dueDate        DateTime             @map("due_date") @db.Date
+  paidAt         DateTime?            @map("paid_at") @db.Timestamptz()
+  externalInvoiceId  String? @map("external_invoice_id") @db.VarChar(200)
+  pdfUrl             String? @map("pdf_url") @db.VarChar(500)
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt      DateTime @updatedAt     @map("updated_at") @db.Timestamptz()
+
+  subscription Subscription @relation(fields: [subscriptionId], references: [id])
+
+  @@map("billing_invoices")
+}
+
+// Feature flags personalizados por tenant (funcionalidades beta o exclusivas de un cliente)
+model TenantFeatureFlag {
+  id        String  @id @default(uuid()) @db.Uuid
+  companyId String  @map("company_id") @db.Uuid
+  feature   String  @db.VarChar(100)
+  enabled   Boolean @default(true)
+  // Notas para el equipo: por qué se activó, fecha acordada, si se planea lanzar general
+  notes     String?
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  company Company @relation(fields: [companyId], references: [id])
+
+  @@unique([companyId, feature])
+  @@map("tenant_feature_flags")
+}
+
 
 // ============================================
 // Auditoria

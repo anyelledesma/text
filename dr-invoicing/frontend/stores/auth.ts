@@ -8,6 +8,25 @@ interface User {
   role: string;
 }
 
+interface RegisterPayload {
+  company: {
+    rnc: string;
+    businessName: string;
+    tradeName?: string;
+    phone: string;
+    address: string;
+    municipality?: string;
+    province?: string;
+  };
+  admin: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  };
+  planTier: 'FREE' | 'STARTER' | 'PROFESSIONAL';
+}
+
 interface LoginResponse {
   accessToken: string;
   refreshToken: string;
@@ -44,6 +63,26 @@ export const useAuthStore = defineStore('auth', () => {
       baseURL: config.public.apiBase as string,
       method: 'POST',
       body: { email, password },
+    });
+
+    accessToken.value = data.accessToken;
+    refreshToken.value = data.refreshToken;
+    user.value = data.user;
+
+    if (import.meta.client) {
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      localStorage.setItem('user', JSON.stringify(data.user));
+    }
+  }
+
+  async function register(payload: RegisterPayload) {
+    const config = useRuntimeConfig();
+
+    const data = await $fetch<LoginResponse>('/auth/register', {
+      baseURL: config.public.apiBase as string,
+      method: 'POST',
+      body: payload,
     });
 
     accessToken.value = data.accessToken;
@@ -129,6 +168,7 @@ export const useAuthStore = defineStore('auth', () => {
     refreshToken,
     isAuthenticated,
     login,
+    register,
     logout,
     refreshAccessToken,
     loadFromStorage,
